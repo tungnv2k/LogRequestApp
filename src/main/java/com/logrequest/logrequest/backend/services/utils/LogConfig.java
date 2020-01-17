@@ -1,4 +1,4 @@
 package com.logrequest.logrequest.backend.services.utils;
 
-public class GetLog {
+public class LogConfig {
 }

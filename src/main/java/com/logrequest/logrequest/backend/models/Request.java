@@ -68,7 +68,7 @@ public class Request {
     }
 
     public String getRequest(String host) {
-        return host + getPath() + getQueryStr();
+        return host + getPath() + "?" + getQueryStr();
     }
 
     public String getCURL(String host) {
