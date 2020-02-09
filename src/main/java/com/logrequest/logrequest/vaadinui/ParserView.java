@@ -33,7 +33,7 @@ import java.util.List;
 @PreserveOnRefresh
 @CssImport("./styles/shared-styles.css")
 public class ParserView extends VerticalLayout {
-    public static final String ROUTE = "requests/parse";
+    public static final String ROUTE = "parse";
 
     private static Page page = UI.getCurrent().getPage();
 

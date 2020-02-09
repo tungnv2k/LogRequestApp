@@ -1,8 +1,6 @@
 package com.logrequest.logrequest.vaadinui;
 
-import com.logrequest.logrequest.backend.models.User;
 import com.vaadin.flow.component.Html;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
@@ -11,8 +9,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
@@ -33,6 +29,7 @@ public class LoginView extends HorizontalLayout {
         Button loginGoogle = new Button("Login with Google");
         loginGoogle.setWidth("100%");
         loginGoogle.setIcon(new Icon(VaadinIcon.GOOGLE_PLUS_SQUARE));
+        loginGoogle.setDisableOnClick(true);
         Anchor googleLink = new Anchor("/login/google");
         googleLink.add(loginGoogle);
         vertLayout.add(googleLink);
