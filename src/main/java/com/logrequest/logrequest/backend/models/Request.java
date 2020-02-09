@@ -18,9 +18,9 @@ public class Request {
     @Id
     private String id;
 
-    private String ipRequest;
+    private String ipUser;
 
-    private String ipResponse;
+    private String ipRemote;
 
     private LocalDateTime timestamp;
 
@@ -33,10 +33,9 @@ public class Request {
     public Request() {
     }
 
-    public Request(String ipResponse, String ipRequest, LocalDateTime timestamp,
+    public Request(String ipRemote, LocalDateTime timestamp,
                    String method, String path, String queryStr) {
-        this.ipResponse = ipResponse;
-        this.ipRequest = ipRequest;
+        this.ipRemote = ipRemote;
         this.timestamp = timestamp;
         this.method = method;
         this.path = path;
@@ -47,12 +46,8 @@ public class Request {
         return timestamp;
     }
 
-    public String getIpRequest() {
-        return ipRequest;
-    }
-
-    public String getIpResponse() {
-        return ipResponse;
+    public String getIpRemote() {
+        return ipRemote;
     }
 
     public String getMethod() {

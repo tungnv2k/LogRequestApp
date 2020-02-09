@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RequestParse {
 
@@ -19,31 +21,47 @@ public class RequestParse {
     public RequestParse() {
     }
 
-    private static Request parseLog(String log) {
-        log = log.replaceAll("[\"\\[\\]]", "");
-        String[] strings = log.split("\\s");
+    private static Request parseOne(String log, List<String> vars) {
 
-        String ipResponse = strings[0].substring(strings[0].indexOf(":") + 1);
-        String ipRequest = strings[13];
-        String method = strings[5];
+        List<String> logList = new ArrayList<>();
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss");
-        LocalDateTime timestamp = LocalDateTime.parse(strings[3], dateTimeFormatter);
+        Pattern pattern = Pattern.compile("\\[.*?]|\".*?\"|[\\S]+");
+        Matcher m = pattern.matcher(log);
 
-        String rawPath = strings[6];
-        String path = rawPath.substring(0, rawPath.indexOf("?"));
-        String queryStr = rawPath.substring(rawPath.indexOf("?") + 1);
+        while (m.find()) {
+            logList.add(m.group());
+        }
 
-        return new Request(ipResponse, ipRequest, timestamp, method, path, queryStr);
+        String remoteIp = logList.get(vars.indexOf("$remote_addr"));
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z");
+        LocalDateTime timestamp = LocalDateTime.parse(
+                logList.get(vars.indexOf("[$time_local]"))
+                        .replace("[", "")
+                        .replace("]", ""),
+                dateTimeFormatter);
+
+        String request = logList.get(vars.indexOf("\"$request\"")).replaceAll("\"", "");
+        String method = request.substring(0, request.indexOf(" "));
+        String rawPath = request.substring(request.indexOf(" ") + 1);
+
+        if (rawPath.contains("?")) {
+            String path = rawPath.substring(0, rawPath.indexOf("?"));
+            String queryStr = rawPath.substring(rawPath.indexOf("?") + 1);
+
+            return new Request(remoteIp, timestamp, method, path, queryStr);
+        }
+
+        return new Request(remoteIp, timestamp, method, rawPath, "");
     }
 
-    public static List<Request> parser(String logList) {
+    public static List<Request> parser(String logList, List<String> vars) {
         List<Request> requestList = new ArrayList<>();
 
         try (BufferedReader in = new BufferedReader(new StringReader(logList))) {
             String log;
             while ((log = in.readLine()) != null) {
-                requestList.add(parseLog(log));
+                requestList.add(parseOne(log, vars));
             }
         } catch (IOException e) {
             LOG.error("Exception: " + e);

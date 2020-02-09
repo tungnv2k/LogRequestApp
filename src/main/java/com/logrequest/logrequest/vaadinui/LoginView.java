@@ -30,26 +30,6 @@ public class LoginView extends HorizontalLayout {
         VerticalLayout vertLayout = new VerticalLayout();
         vertLayout.add(new Html("<h1>Log in</h1>"));
 
-        User user = new User();
-
-        TextField username = new TextField("Username");
-        username.setWidth("100%");
-        PasswordField password = new PasswordField("Password");
-        password.setWidth("100%");
-        Button submit = new Button("Log in");
-        submit.setWidth("100%");
-        submit.setDisableOnClick(true);
-        submit.addClickListener(buttonClickEvent -> {
-            user.setUsername(username.getValue());
-            user.setPassword(password.getValue());
-            System.out.println(user.getUsername() + " " + user.getPassword());
-            submit.getUI().ifPresent(ui -> ui.navigate("register"));
-        });
-
-        vertLayout.add(username, password, submit);
-
-        vertLayout.add(new Text("__________or__________"));
-
         Button loginGoogle = new Button("Login with Google");
         loginGoogle.setWidth("100%");
         loginGoogle.setIcon(new Icon(VaadinIcon.GOOGLE_PLUS_SQUARE));

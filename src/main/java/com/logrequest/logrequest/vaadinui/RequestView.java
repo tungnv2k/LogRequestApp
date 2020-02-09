@@ -17,7 +17,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -62,7 +61,7 @@ public class RequestView extends VerticalLayout {
         Button addButton = new Button("Add");
         addButton.setWidth("200px");
         addButton.addClickListener(buttonClickEvent -> {
-            requestRepository.saveAll(RequestParse.parser(inputLog.getValue()));
+//            requestRepository.saveAll(RequestParse.parser(inputLog.getValue()));
             inputDialog.close();
             inputLog.clear();
             refresh.click();
@@ -154,10 +153,8 @@ public class RequestView extends VerticalLayout {
 
         table.addColumn(new LocalDateTimeRenderer<>(Request::getTimestamp, DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM)))
                 .setHeader("Timestamp").setResizable(true).setSortable(true).setAutoWidth(true);
-        table.addColumn(Request::getIpResponse)
+        table.addColumn(Request::getIpRemote)
                 .setHeader("Server").setResizable(true).setSortable(true).setAutoWidth(true);
-        table.addColumn(Request::getIpRequest)
-                .setHeader("Client").setResizable(true).setSortable(true).setAutoWidth(true);
         table.addColumn(Request::getMethod)
                 .setHeader("Method").setResizable(true).setSortable(true).setAutoWidth(true);
         table.addColumn(Request::getPath)
