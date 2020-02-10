@@ -104,14 +104,21 @@ public class ParserView extends VerticalLayout {
 
         hostField.addValueChangeListener(valueChangeEvent -> tmp.setValue(hostField.getValue()));
 
+        Notification wrongFormat = new Notification("", 10000, Notification.Position.BOTTOM_STRETCH);
+
         convert.addClickListener(buttonClickEvent -> {
             if (!tmp.getValue().isBlank()) {
                 reqList.clear();
                 cURLList.clear();
-                RequestParse.parser(inputLog.getValue(), logFmtSelector.getValue().getVariables()).forEach(request -> {
-                    reqList.add(request.getRequest(tmp.getValue()));
-                    cURLList.add(request.getCURL(tmp.getValue()));
-                });
+                try {
+                    RequestParse.parser(inputLog.getValue(), logFmtSelector.getValue().getVariables()).forEach(request -> {
+                        reqList.add(request.getRequest(tmp.getValue()));
+                        cURLList.add(request.getCURL(tmp.getValue()));
+                    });
+                } catch (IllegalArgumentException e) {
+                    wrongFormat.setText("Wrong format # " + e.getMessage());
+                    wrongFormat.open();
+                }
                 reqBox.setValue(toString(reqList));
                 cURLBox.setValue(toString(cURLList));
             } else emptyHost.open();

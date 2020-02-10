@@ -41,9 +41,9 @@ public class RequestParse {
                         .replace("]", ""),
                 dateTimeFormatter);
 
-        String request = logList.get(vars.indexOf("\"$request\"")).replaceAll("\"", "");
-        String method = request.substring(0, request.indexOf(" "));
-        String rawPath = request.substring(request.indexOf(" ") + 1);
+        String[] request = logList.get(vars.indexOf("\"$request\"")).replaceAll("\"", "").split("\\s");
+        String method = request[0];
+        String rawPath = request[1];
 
         if (rawPath.contains("?")) {
             String path = rawPath.substring(0, rawPath.indexOf("?"));
@@ -61,7 +61,11 @@ public class RequestParse {
         try (BufferedReader in = new BufferedReader(new StringReader(logList))) {
             String log;
             while ((log = in.readLine()) != null) {
-                requestList.add(parseOne(log, vars));
+                try {
+                    requestList.add(parseOne(log, vars));
+                } catch (Exception ignored) {
+                    throw new IllegalArgumentException(log);
+                }
             }
         } catch (IOException e) {
             LOG.error("Exception: " + e);
