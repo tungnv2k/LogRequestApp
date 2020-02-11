@@ -31,8 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").permitAll()
                 .authorizationEndpoint().baseUri("/login")
                 .and()
-                .redirectionEndpoint().baseUri("" +
-                "/callback");
+                .redirectionEndpoint().baseUri("/callback");
     }
 
     @Override
